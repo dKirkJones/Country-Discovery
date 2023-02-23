@@ -8,8 +8,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.countrydiscovery.R
 import com.example.countrydiscovery.data.Country
 
-class CountryListAdapter (var countryList: List<Country.CountryItem> = emptyList()) :
-    RecyclerView.Adapter<CountryListAdapter.ViewHolder>() {
+class CountryListAdapter (
+    var countryList: List<Country.CountryItem> = emptyList(),
+    val itemClickListener: OnItemClickListener
+
+): RecyclerView.Adapter<CountryListAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var countryName: TextView
@@ -17,13 +20,11 @@ class CountryListAdapter (var countryList: List<Country.CountryItem> = emptyList
         var countryRegion: TextView
         var countryCode: TextView
 
-
         init {
             countryName = itemView.findViewById(R.id.tv_county_name)
             countryCapital = itemView.findViewById(R.id.tv_capital)
             countryRegion = itemView.findViewById(R.id.tv_region)
             countryCode = itemView.findViewById(R.id.tv_code)
-
         }
     }
 
@@ -38,11 +39,17 @@ class CountryListAdapter (var countryList: List<Country.CountryItem> = emptyList
         holder.countryCapital.text = countryList[position].capital
         holder.countryRegion.text = countryList[position].region
         holder.countryCode.text = countryList[position].code
-
+        holder.itemView.setOnClickListener {
+            itemClickListener.onItemClick(countryList[position])
+        }
     }
 
     override fun getItemCount(): Int {
         return countryList.size
+    }
+
+    interface OnItemClickListener {
+        fun onItemClick(position: Country.CountryItem)
     }
 
 }

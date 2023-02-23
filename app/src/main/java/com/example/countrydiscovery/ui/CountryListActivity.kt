@@ -1,6 +1,7 @@
 package com.example.countrydiscovery.ui
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -9,9 +10,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.countrydiscovery.R
 import com.example.countrydiscovery.adapter.CountryListAdapter
+import com.example.countrydiscovery.data.Country
 import com.example.countrydiscovery.viewmodel.CountryViewModel
 
-class CountryListActivity : AppCompatActivity() {
+class CountryListActivity : AppCompatActivity(), CountryListAdapter.OnItemClickListener {
 
     val TAG = "CountryListActivity"
 
@@ -29,7 +31,7 @@ class CountryListActivity : AppCompatActivity() {
         recyclerViewCountries = findViewById(R.id.country_recycler_view)
         linearLayoutManager = LinearLayoutManager(this)
         recyclerViewCountries.layoutManager = linearLayoutManager
-        myAdapter = CountryListAdapter(emptyList())
+        myAdapter = CountryListAdapter(emptyList(), this)
         recyclerViewCountries.adapter = myAdapter
 
         viewModel.countriesLiveData.observe(this) {
@@ -42,6 +44,11 @@ class CountryListActivity : AppCompatActivity() {
         }
 
         viewModel.getCountries()
+    }
+
+    override fun onItemClick(position: Country.CountryItem) {
+       val intent = Intent(this@CountryListActivity, CountryDetailsActivity::class.java)
+        startActivity(intent)
     }
 
 }
